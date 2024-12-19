@@ -3,19 +3,97 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 224.3 76.3% 48%;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.theme-rainy {
+  --background: 200 100% 95%;
+  --foreground: 200 100% 20%;
 }
+
+.theme-windy {
+  --background: 180 100% 95%;
+  --foreground: 180 100% 20%;
+}
+
+.theme-sunny {
+  --background: 40 100% 95%;
+  --foreground: 40 100% 20%;
+}
+
+.theme-cloudy {
+  --background: 220 20% 95%;
+  --foreground: 220 20% 20%;
+}
+
+.theme-dreamy {
+  --background: 280 50% 95%;
+  --foreground: 280 50% 20%;
+}
+
+.theme-fall {
+  --background: 30 70% 95%;
+  --foreground: 30 70% 20%;
+}
+
+.theme-spring {
+  --background: 120 50% 95%;
+  --foreground: 120 50% 20%;
+}
+
+.theme-summer {
+  --background: 60 80% 95%;
+  --foreground: 60 80% 20%;
+}
+
+.theme-winter {
+  --background: 200 50% 95%;
+  --foreground: 200 50% 20%;
+}
+
+.theme-love {
+  --background: 350 100% 95%;
+  --foreground: 350 100% 20%;
+}
+
