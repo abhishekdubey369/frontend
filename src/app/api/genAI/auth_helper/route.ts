@@ -1,17 +1,21 @@
 import axios from "axios";
 import { genaiConfig } from "@/types/genaiconfig";
-import { genAiLocal } from "@/helper/localStorage";
+// import { genAiLocal } from "@/helper/localStorage";
 import { NextRequest, NextResponse } from "next/server";
+import { tokenData } from "@/helper/tokenData";
 
 export async function POST(req:NextRequest){
     try{
-        if(genAiLocal()){
-            const data:genaiConfig = JSON.parse(localStorage.getItem('genaiConfig')||'{}')
-            const res= await axios.post(`${process.env.GENAI_API_URL}/configure`,data)
+        const llmData = await tokenData(req);
+        if(llmData){
+            const data:genaiConfig = llmData;
+            console.log("data",data)
+            const res= await axios.post(`${process.env.GENAI_BACKEND}/configure`,data)
             if(res.status===200){
                 console.log("Configured successfully")
-                const {issue} = await req.json()
-                const response = await axios.post(`${process.env.GENAI_API_URL}/auth_helper/act`,issue)
+                const redata = await req.json()
+                // console.log("issue",redata)
+                const response = await axios.post(`${process.env.GENAI_BACKEND}/auth_helper/act`,redata)
                 return NextResponse.json(response.data)
             }else{
                 console.log("Failed to configure")

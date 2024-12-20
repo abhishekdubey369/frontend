@@ -18,7 +18,7 @@ export default function SignupForm() {
   const router = useRouter()
 
   useEffect(()=>{
-    if(user.username && user.email && user.password){
+    if(user.username && user.email && user.password.length>8){
       setButton(false);
     }
     else{
@@ -29,12 +29,11 @@ export default function SignupForm() {
     event.preventDefault()
     setError('')
 
-    // const formData = new FormData(event.currentTarget)
     const result = await axios.post('/api/users/signup', user)
 
-    if (result.error) {
-      setError(result.error)
-    } else {
+    if (result.data.error) {
+      setError(result.data.error)
+    } else if (result.data.success) {
       router.push('/login') // Redirect to dashboard on successful signup
     }
   }

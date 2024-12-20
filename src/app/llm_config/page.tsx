@@ -6,6 +6,8 @@ import {
   validateLLMConfig,
 } from "@/utils/llmUtils";
 
+import axios from "axios";
+
 import { useRouter } from "next/navigation";
 
 const NeighborhoodWeather: React.FC = () => {
@@ -13,9 +15,9 @@ const NeighborhoodWeather: React.FC = () => {
   const router = useRouter();
 
   const [config, setConfig] = React.useState<LLMConfig>({
-    llmType: "openai",
-    apiKey: "",
-    modelType: openAIModels[0],
+    llm_type: "openai",
+    api_key: "",
+    model: openAIModels[0],
   });
 
   const handleConfigChange = (field: keyof LLMConfig, value: string) => {
@@ -30,7 +32,8 @@ const NeighborhoodWeather: React.FC = () => {
     try {
       if(validateLLMConfig(config)){
         localStorage.setItem("genaiConfig", JSON.stringify(config));
-        router.push("/register")
+        const res = axios.post("/api/genAI/llm_config", config);
+        router.push("/dashboard")
       }
     } catch (error: any) {
       alert(error.message);
@@ -38,7 +41,7 @@ const NeighborhoodWeather: React.FC = () => {
   };
 
   const getModelOptions = () => {
-    return config.llmType === "openai" ? openAIModels : groqModels;
+    return config.llm_type === "openai" ? openAIModels : groqModels;
   };
 
   return (
@@ -57,8 +60,8 @@ const NeighborhoodWeather: React.FC = () => {
             </label>
             <select
               id="llmType"
-              value={config.llmType}
-              onChange={(e) => handleConfigChange("llmType", e.target.value)}
+              value={config.llm_type}
+              onChange={(e) => handleConfigChange("llm_type", e.target.value)}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               {llmTypeOptions.map((option) => (
@@ -79,8 +82,8 @@ const NeighborhoodWeather: React.FC = () => {
             <input
               type="text"
               id="apiKey"
-              value={config.apiKey}
-              onChange={(e) => handleConfigChange("apiKey", e.target.value)}
+              value={config.api_key}
+              onChange={(e) => handleConfigChange("api_key", e.target.value)}
               placeholder="Enter your API Key"
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -95,8 +98,8 @@ const NeighborhoodWeather: React.FC = () => {
             </label>
             <select
               id="modelType"
-              value={config.modelType}
-              onChange={(e) => handleConfigChange("modelType", e.target.value)}
+              value={config.model}
+              onChange={(e) => handleConfigChange("model", e.target.value)}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               {getModelOptions().map((model) => (

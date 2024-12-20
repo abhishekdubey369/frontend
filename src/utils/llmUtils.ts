@@ -1,7 +1,7 @@
 export interface LLMConfig {
-    llmType: "openai" | "groq";
-    apiKey: string;
-    modelType: string;
+    llm_type: "openai" | "groq";
+    api_key: string;
+    model: string;
   }
   
   export const openAIModels = [
@@ -37,14 +37,14 @@ export interface LLMConfig {
   }
   
   export function validateLLMConfig(config: LLMConfig): boolean {
-    if (!config.apiKey) {
+    if (!config.api_key) {
       throw new Error("API key is required.");
     }
   
-    const models = getModelsByLLMType(config.llmType);
-    if (!models.includes(config.modelType)) {
+    const models = getModelsByLLMType(config.llm_type);
+    if (!models.includes(config.model)) {
       throw new Error(
-        `Invalid model type for ${config.llmType}. Available models are: ${models.join(", ")}`
+        `Invalid model type for ${config.llm_type}. Available models are: ${models.join(", ")}`
       );
     }
   

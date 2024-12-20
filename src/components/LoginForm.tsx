@@ -1,38 +1,38 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import axios from 'axios'
 
 export default function LoginForm() {
   const [error, setError] = useState('')
+  const [user,setUser] = useState({email:"",password:""});
+  const [buttonDisabled, setButtonDisabled] = useState(true)
   const router = useRouter()
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('')
+    const result = await axios.post('/api/users/login',user)
 
-    const formData = new FormData(event.currentTarget)
-    const result = await fetch('/api/login', {
-        method: 'POST',
-        body: JSON.stringify({
-            email: formData.get('email'),
-            password: formData.get('password'),
-        }),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        }).then((res) => res.json()
-    );
-
-    if (result.error) {
-      setError(result.error)
-    } else {
-      router.push('/dashboard') // Redirect to dashboard on successful login
+    if(result.data.error){
+      setError(result.data.error)
+      return
+    }else if (result.data.success) {
+      router.push('/dashboard')
     }
   }
+
+  useEffect(() => {
+    if(user.email && user.password.length>8){
+      setButtonDisabled(false)
+    }else{
+      setButtonDisabled(true)
+    }
+  },[user])
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -49,6 +49,7 @@ export default function LoginForm() {
             required
             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Email address"
+            onChange={(e)=>setUser({...user,email:e.target.value})}
           />
         </div>
         <div>
@@ -63,6 +64,7 @@ export default function LoginForm() {
             required
             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Password"
+            onChange={(e)=>setUser({...user,password:e.target.value})}
           />
         </div>
       </div>
@@ -95,6 +97,7 @@ export default function LoginForm() {
         <Button
           type="submit"
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          disabled={buttonDisabled}
         >
           Sign in
         </Button>
