@@ -1,4 +1,4 @@
-export interface WeatherDataComplete {
+export interface WeatherData {
     id: number
     name: string
     main: {
@@ -21,38 +21,6 @@ export interface WeatherDataComplete {
       description: string
       icon: string
     }>
-  }
-  
-  export interface WeatherData {
-    id: number
-    city: string
-    temperature: number
-    pressure: number
-    humidity: number
-    windSpeed: number
-    windDirection: number
-    description: string
-    icon: string
-    timestamp: string
-  }
-  
-  export type Theme = 'rainy' | 'windy' | 'sunny' | 'cloudy' | 'dreamy' | 'spring' | 'summer' | 'winter' | 'fall' | 'love'
-  
-  export interface Activity {
-    id: number
-    name: string
-    weather: string
-    timestamp: string
-  }
-  
-  export interface Event {
-    id: number
-    name: string
-    date: string
-    weather: string
-    ticketPrice?: number
-    invitedFriends: string[]
-    timestamp: string
   }
   
   
