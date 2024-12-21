@@ -9,7 +9,7 @@ import { EnhancedCalendar } from '@/components/ui/enhanced-calendar';
 import {Activity} from '@/types/activity';
 import axios from 'axios';
 
-export default function ActivityCreator() {
+export default function ActivityCreator({}:any) {
     const [activity, setActivity] = useState('');
     const [activities, setActivities] = useState<Activity[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -85,7 +85,7 @@ export default function ActivityCreator() {
                         />
                         <EnhancedCalendar
                             selected={selectedDate}
-                            onChange={(date) => setSelectedDate(date)}
+                            onChange={(date:any) => setSelectedDate(date)}
                         />
                         <Button onClick={handleAddActivity}>Add Activity</Button>
                     </div>

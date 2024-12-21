@@ -24,7 +24,7 @@ export function WeatherDetail({ weather, onClose }: WeatherDetailProps) {
   // Fetch summary once
   const getSummary = async () => {
     try {
-      const data = await fetchSummary(weather.weather[0].main, weather.name);
+      const data:any = await fetchSummary(weather.weather[0].main, weather.name);
       setSummary(data.flirt_summary);
     } catch (error) {
       console.error('Error fetching summary:', error);
@@ -35,7 +35,7 @@ export function WeatherDetail({ weather, onClose }: WeatherDetailProps) {
   // Fetch recommendations once
   const getRecommendation = async () => {
     try {
-      const recommendation = await fetchActivityRecommendation(weather.weather[0].main, weather.name);
+      const recommendation:any = await fetchActivityRecommendation(weather.weather[0].main, weather.name);
       setActivityRecommendation(recommendation);
     } catch (error) {
       console.error('Error fetching recommendations:', error);

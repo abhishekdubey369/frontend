@@ -27,12 +27,12 @@ const NeighborhoodWeather: React.FC = () => {
     }));
   };
 
-  const handleFormSubmit = (event: React.FormEvent) => {
+  const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       if(validateLLMConfig(config)){
         localStorage.setItem("genaiConfig", JSON.stringify(config));
-        const res = axios.post("/api/genAI/llm_config", config);
+        await axios.post("/api/genAI/llm_config", config);
         router.push("/dashboard")
       }
     } catch (error: any) {

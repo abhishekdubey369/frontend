@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export async function POST(req:NextRequest) {
     const reqBody = await req.json();
     const {llm_type,api_key,model} = reqBody;
-    const tokenData = {
+    const tokenData:any = {
         llm_type,
         api_key,
         model

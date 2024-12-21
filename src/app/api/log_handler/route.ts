@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
 
-    const decoded = jwt.verify(token?.value, process.env.TOKEN_SECRET!);
+    const decoded:any = jwt.verify(token?.value, process.env.TOKEN_SECRET!);
     const body = await req.json();
     body.createdBy = decoded.id;
 
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const weatherLogs = await WeatherLog.find();
     // console.log(weatherLogs);

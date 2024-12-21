@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import axios from 'axios'
+import Link from 'next/link'
 
 export default function LoginForm() {
   const [error, setError] = useState('')
@@ -83,9 +84,9 @@ export default function LoginForm() {
         </div>
 
         <div className="text-sm">
-          <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <Link href="/forgotPass" className="font-medium text-indigo-600 hover:text-indigo-500">
             Forgot your password?
-          </a>
+          </Link>
         </div>
       </div>
 

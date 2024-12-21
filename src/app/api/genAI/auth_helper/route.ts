@@ -6,7 +6,7 @@ import { tokenData } from "@/helper/tokenData";
 
 export async function POST(req:NextRequest){
     try{
-        const llmData = await tokenData(req);
+        const llmData:any = await tokenData(req);
         if(llmData){
             const data:genaiConfig = llmData;
             //console.log("data",data)
@@ -27,7 +27,7 @@ export async function POST(req:NextRequest){
                 return NextResponse.json({error:"to get GenAI help please configure AI param"})
             }
         }
-    }catch(error){
+    }catch(error:any){
         //console.error(error)
         return NextResponse.json({error:"please try different model"})
     }

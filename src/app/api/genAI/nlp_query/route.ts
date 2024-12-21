@@ -6,7 +6,7 @@ import { tokenData } from "@/helper/tokenData";
 
 export async function POST(req:NextRequest){
     try{
-        const llmData = await tokenData(req);
+        const llmData:any = await tokenData(req);
         if(llmData){
             const data:genaiConfig = llmData;
             const res= await axios.post(`${process.env.GENAI_BACKEND}/configure`,data)
@@ -28,7 +28,7 @@ export async function POST(req:NextRequest){
             }
         }
     }
-    catch(error){
+    catch(error:any){
         console.error(error)
         return NextResponse.json({error:"please try different model"})
     }

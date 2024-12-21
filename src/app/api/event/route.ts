@@ -7,13 +7,13 @@ connect().then(() => console.log("Database connected")).catch(err => console.err
 
 export async function POST(req: NextRequest) {
     try {
-        const token = req.cookies.get("token");
-        const decoded = jwt.verify(token?.value, process.env.TOKEN_SECRET!);
+        const token:any = req.cookies.get("token");
+        const decoded:any = jwt.verify(token?.value, process.env.TOKEN_SECRET!);
         const body = await req.json();
         body.createdBy = decoded.id;
         const newEvent = await EventAct.create(body);
         return NextResponse.json({ message: "Event created successfully", event: newEvent }, { status: 201 });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     try {
         const events = await EventAct.find();
         return NextResponse.json(events, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -33,7 +33,7 @@ export async function PUT(req: NextRequest) {
         const { id , invitedFriends} = await body;
         const updatedEvent = await EventAct.find({_id:id}).updateOne({$push: {invitedFriends: invitedFriends}});
         return NextResponse.json({ message: "Event updated successfully", event: updatedEvent }, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -43,7 +43,7 @@ export async function DELETE(req: NextRequest) {
         const { id } = await req.json();
         await EventAct.findByIdAndDelete(id);
         return NextResponse.json({ message: "Event deleted successfully" }, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

@@ -38,7 +38,7 @@ export default function WeatherLog() {
   const handleDeleteLog = async (id: string) => {
     const response = await fetch(`/api/log_handler?id=${id}`, { method: "DELETE" });
     if (response.ok) {
-      setWeatherLogs((prev) => prev.filter((log) => log.id !== id));
+      setWeatherLogs((prev) => prev.filter((log:any) => log.id !== id));
     }
   };
   
@@ -94,7 +94,7 @@ export default function WeatherLog() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {weatherLogs.map((log) => (
+            {weatherLogs.map((log:any) => (
               <TableRow key={log.weather.id}>
                 <TableCell>{log.weather.name}</TableCell>
                 <TableCell>

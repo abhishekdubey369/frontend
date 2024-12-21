@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export function EnhancedCalendar({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: any) {
   const [date, setDate] = React.useState<Date>()
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>()
   const [calendarType, setCalendarType] = React.useState<"single" | "range">("single")

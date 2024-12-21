@@ -6,11 +6,11 @@ import { TabsContent } from "@/components/ui/tabs";
 import { EnhancedCalendar } from "@/components/ui/enhanced-calendar";
 import axios from "axios";
 
-export default function EventCreator() {
-    const [event, setEvent] = useState('');
-    const [events, setEvents] = useState([]);
-    const [ticketPrice, setTicketPrice] = useState('');
-    const [invitedFriend, setInvitedFriend] = useState('');
+export default function EventCreator({}:any) {
+    const [event, setEvent] = useState<any>('');
+    const [events, setEvents] = useState<any>([]);
+    const [ticketPrice, setTicketPrice] = useState<any>('');
+    const [invitedFriend, setInvitedFriend] = useState<any>('');
     const [eventDate, setEventDate] = useState(new Date());
 
     // Fetch events from the backend
@@ -18,7 +18,7 @@ export default function EventCreator() {
         try {
             const response = await axios.get("/api/event");
             console.log(response.data);
-            const mappedEvents = response.data.map(e => ({
+            const mappedEvents = response.data.map((e:any) => ({
                 ...e,
                 id: e.id,
             }));
@@ -58,11 +58,11 @@ export default function EventCreator() {
     };
 
     // Invite a friend to an event
-    const handleInviteFriend = async (eventId) => {
+    const handleInviteFriend = async (eventId:any) => {
         if (!invitedFriend.trim()) return;
 
         try {
-            const eventToUpdate = events.find(e => e.id === eventId);
+            const eventToUpdate = events.find((e:any) => e.id === eventId);
             const updatedFriends = [...eventToUpdate.invitedFriends, invitedFriend];
 
             const response = await axios.put(`/api/event`, {
@@ -70,7 +70,7 @@ export default function EventCreator() {
                 invitedFriends: updatedFriends,
             });
 
-            setEvents(events.map(e => (e.id === eventId ? { ...e, invitedFriends: updatedFriends } : e)));
+            setEvents(events.map((e:any) => (e.id === eventId ? { ...e, invitedFriends: updatedFriends } : e)));
             setInvitedFriend('');
         } catch (error) {
             console.error(error);
@@ -79,10 +79,10 @@ export default function EventCreator() {
     };
 
     // Delete an event
-    const handleDeleteEvent = async (eventId) => {
+    const handleDeleteEvent = async (eventId:any) => {
         try {
             await axios.delete(`/api/event`, { data: { id: eventId } });
-            setEvents(events.filter(e => e.id !== eventId));
+            setEvents(events.filter((e:any) => e.id !== eventId));
         } catch (error) {
             console.error(error);
             alert("Failed to delete the event.");
@@ -100,21 +100,21 @@ export default function EventCreator() {
                         <Input
                             placeholder="Enter event name"
                             value={event}
-                            onChange={(e) => setEvent(e.target.value)}
+                            onChange={(e:any) => setEvent(e.target.value)}
                         />
                         <EnhancedCalendar selected={eventDate} onChange={setEventDate} />
                         <Input
                             type="number"
                             placeholder="Ticket price"
                             value={ticketPrice}
-                            onChange={(e) => setTicketPrice(e.target.value)}
+                            onChange={(e:any) => setTicketPrice(e.target.value)}
                         />
                         <Button onClick={handleScheduleEvent}>Schedule Event</Button>
                     </div>
                     <div>
                         <h4 className="font-semibold">Scheduled Events:</h4>
                         <ul>
-                            {events.map((e) => (
+                            {events.map((e:any) => (
                                 <li key={e.id} className="mb-4">
                                     <p>
                                         <strong>{e.name}</strong> - {new Date(e.date).toLocaleDateString()} - Ticket: ${e.ticketPrice}

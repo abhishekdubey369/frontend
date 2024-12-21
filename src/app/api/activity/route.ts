@@ -7,8 +7,8 @@ connect().then(() => console.log("Database connected")).catch(err => console.err
 
 export async function POST(req: NextRequest) {
     try {
-        const token = req.cookies.get("token");
-        const decoded = jwt.verify(token?.value, process.env.TOKEN_SECRET!);
+        const token:any = req.cookies.get("token");
+        const decoded:any = jwt.verify(token?.value||"", process.env.TOKEN_SECRET!);
         const body = await req.json();
         body.createdBy = decoded.id;
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
         const newActivity = await Activity.create(body);
         return NextResponse.json({ message: "Activity created successfully", event: newActivity }, { status: 201 });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     try {
         const activities = await Activity.find();
         return NextResponse.json(activities, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
@@ -40,7 +40,7 @@ export async function DELETE(req: NextRequest) {
         }
         await Activity.findByIdAndDelete(id);
         return NextResponse.json({ message: "Activity deleted successfully" }, { status: 200 });
-    } catch (error) {
+    } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

@@ -21,7 +21,9 @@ export async function POST(req:NextRequest) {
         if(!isMatch){
             return NextResponse.json({error:"invalid credentials"},{status:400})
         }
-
+        if(!user.isVerified){
+            return NextResponse.json({error:"email not verified"},{status:400})
+        }
         //create token data
         const tokenData = {
             id: user._id,
