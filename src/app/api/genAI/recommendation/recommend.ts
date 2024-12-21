@@ -21,6 +21,6 @@ export async function GET(request: Request) {
   const activities = activityRecommendations[weather]
   const randomActivity = activities[Math.floor(Math.random() * activities.length)]
 
-  return NextResponse.json({ activity: randomActivity })
+  return NextResponse.json({ activity: randomActivity , success:true}, { status: 200 })
 }
 

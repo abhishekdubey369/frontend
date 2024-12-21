@@ -1,7 +1,7 @@
 // import { create } from "domain";
 import mongoose from "mongoose";
 
-const eventSchema = mongoose.Schema({
+const weatherLogSchema = mongoose.Schema({
     username: {
         type: String,
         required: [true, "Username is required"],
@@ -12,9 +12,13 @@ const eventSchema = mongoose.Schema({
         required: [true, "Email is required"],
         ref: "users"
     },
-    Event:{
-        type : Object ,
-        required: [true, "Activity is required"],
+    weather:{
+        type : Object,
+        required: true,
+    },
+    activity:{
+        type: [String],
+        required: true,
     },
     createdAt: {
         type: Date,
@@ -23,13 +27,9 @@ const eventSchema = mongoose.Schema({
     updatedAt: {
         type: Date,
         default: new Date()
-    },
-    isVerified: {
-        type: Boolean,
-        default: false
-    },
+    }
 });
 
-const EventAct = mongoose.models.event || mongoose.model("event", eventSchema);
+const weatherSchema = mongoose.models.weatherlog || mongoose.model("weatherlog", weatherLogSchema);
 
-export default EventAct;
+export default weatherSchema;

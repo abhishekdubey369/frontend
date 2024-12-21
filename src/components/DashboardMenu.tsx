@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Menu } from 'lucide-react'
+import axios from 'axios'
 
 export default function DashboardMenu() {
   const router = useRouter()
@@ -18,9 +19,29 @@ export default function DashboardMenu() {
   ]
 
   const handleNavigation = (path: string) => {
+    if(path === '/logout'){
+      handleLogout()
+    }else{
     router.push(path)
-    setIsMenuOpen(false)
+    setIsMenuOpen(false)}
   }
+
+  const handleLogout = async () => {
+    try {
+      const res = await axios.get('/api/users/logout');
+      if (res.data.success) {
+        localStorage.clear();
+        router.push('/llm_config');
+        setIsMenuOpen(false);
+      } else {
+        throw new Error('Logout failed');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+  
 
   return (
     <nav className="mb-4">
@@ -34,7 +55,12 @@ export default function DashboardMenu() {
               {menuItems.map((item) => (
                 <Button
                   key={item.path}
-                  onClick={() => handleNavigation(item.path)}
+                  onClick={() => {
+                    if(item.label === 'Logout'){
+                        handleLogout()
+                    }else{
+                    handleNavigation(item.path)}
+                }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   role="menuitem"
                 >

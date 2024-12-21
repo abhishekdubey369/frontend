@@ -16,6 +16,53 @@ export default function Dashboard() {
   const [isDisplaying, setIsDisplaying] = useState(false)
   const [city, setCity] = useState('London')
   const [activityRecommendation, setActivityRecommendation] = useState<string | null>(null)
+  const [Summary, setSummary] = useState<string | null>(null)
+  const [quote, setQuote] = useState<string | null>(null)
+
+  const getSummary = async ()=>{
+    const data = await fetchWeatherData(city)
+        if(data){
+        const weatherCondition = getWeatherCondition(data.weather[0].main)
+        const res = await fetchSummary(weatherCondition,city)
+        const resjs = await JSON.parse(res)
+        setSummary(resjs.flirt_summary || 'Model not configure')
+        setQuote(resjs.quote|| 'Model not configure')
+        }
+  }
+
+  const fetchSummary = async (weather: string,city:string): Promise<string> => {
+    const dataSent:{
+        "city": string,
+        "weather": string
+    }={
+        "city": city,
+        "weather": weather
+    }
+    try {
+        const response = await axios.post('/api/genAI/summary',dataSent)
+        const data = await response.data
+        if(data.success){
+            // console.log(data)
+            return JSON.stringify(data.message.response)
+        }
+        // console.log(response)
+        return JSON.stringify(data.message)
+    } catch (error:any) {
+        const response = await axios.get('/api/genAI/recommendation/recommend?weather='+weather)
+        const data = response.data
+        return data.activity
+    }
+  }
+
+  const getReccomendation = async ()=>{
+    const data = await fetchWeatherData(city)
+        if(data){
+        const weatherCondition = getWeatherCondition(data.weather[0].main)
+        const recommendation = await fetchActivityRecommendation(weatherCondition,city)
+        // console.log(recommendation)
+        setActivityRecommendation(recommendation)
+        }
+  }
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -23,11 +70,6 @@ export default function Dashboard() {
     const fetchData = async () => {
       const data = await fetchWeatherData(city)
       setWeatherData(data)
-      if (data) {
-        const weatherCondition = getWeatherCondition(data.weather[0].main)
-        const recommendation = await fetchActivityRecommendation(weatherCondition,city)
-        setActivityRecommendation(recommendation)
-      }
     }
 
     if (isDisplaying) {
@@ -47,8 +89,6 @@ export default function Dashboard() {
   const handleLog = async () => {
     const data = await fetchWeatherData(city)
     setWeatherData(data)
-    // Here you would typically save the data to your database
-    console.log('Logging weather data:', data)
     setIsDisplaying(true)
   }
 
@@ -73,8 +113,13 @@ export default function Dashboard() {
     }
     try {
         const response = await axios.post('/api/genAI/recommendation',dataSent)
-        const data = response.data
-        return data.activity
+        const data = await response.data
+        if(data.success){
+            // console.log(data)
+            return data.message.activity
+        }
+        // console.log(response)
+        return JSON.stringify(data.message)
     } catch (error:any) {
         const response = await axios.get('/api/genAI/recommendation/recommend?weather='+weather)
         const data = response.data
@@ -97,9 +142,20 @@ export default function Dashboard() {
               onChange={(e) => setCity(e.target.value)}
               className="sm:w-64"
             />
-            <Button onClick={handleDisplay}>Display</Button>
-            <Button onClick={handleLog}>Log</Button>
+            <Button onClick={()=>{
+                handleDisplay();
+                getReccomendation();
+                getSummary();
+            }}>Display</Button>
+            <Button onClick={()=>{
+                handleLog();
+                getReccomendation();
+                getSummary();
+            }}>Log</Button>
           </div>
+          <div>
+          </div>
+          {Summary && <p>{Summary}</p>}
           {weatherData && <WeatherDisplay weather={weatherData} />}
           {activityRecommendation && (
             <ActivityRecommendation 
@@ -108,6 +164,7 @@ export default function Dashboard() {
               onDelete={() => setActivityRecommendation(null)}
             />
           )}
+          {quote && <p>{quote}</p>}
         </CardContent>
       </Card>
     </div>

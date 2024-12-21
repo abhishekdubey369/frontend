@@ -1,6 +1,4 @@
-// import { create } from "domain";
 import mongoose from "mongoose";
-import { Activity } from "../types/activity";
 
 const activitySchema = mongoose.Schema({
     username: {
@@ -14,7 +12,7 @@ const activitySchema = mongoose.Schema({
         ref: "users"
     },
     activity:{
-        type : Activity ,
+        type : Object,
         required: [true, "Activity is required"],
     },
     createdAt: {

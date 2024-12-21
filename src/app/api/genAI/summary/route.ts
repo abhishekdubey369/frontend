@@ -16,7 +16,13 @@ export async function POST(req:NextRequest){
                 const redata = await req.json()
                 console.log("issue",redata)
                 const response = await axios.post(`${process.env.GENAI_BACKEND}/summary/act`,redata)
-                return NextResponse.json(response.data)
+                return NextResponse.json({
+                    message:response.data,
+                    success:true
+                },
+                {
+                    status:200
+                })
             }else{
                 console.log("Failed to configure")
                 return NextResponse.json({error:"to get GenAI help please configure AI param"})
