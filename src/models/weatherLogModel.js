@@ -1,35 +1,35 @@
-// import { create } from "domain";
 import mongoose from "mongoose";
 
-const weatherLogSchema = mongoose.Schema({
-    username: {
-        type: String,
-        required: [true, "Username is required"],
-        ref: "users"
+const weatherLogSchema = new mongoose.Schema(
+  {
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: [true, "User is required"],
     },
-    email: {
-        type: String,
-        required: [true, "Email is required"],
-        ref: "users"
+    weather: {
+      type: Object,
+      required: true,
     },
-    weather:{
-        type : Object,
-        required: true,
+    activity: {
+      type: [String],
+      required: true,
     },
-    activity:{
-        type: [String],
-        required: true,
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
     },
-    createdAt: {
-        type: Date,
-        default: new Date()
-    },
-    updatedAt: {
-        type: Date,
-        default: new Date()
-    }
-});
+  }
+);
 
-const weatherSchema = mongoose.models.weatherlog || mongoose.model("weatherlog", weatherLogSchema);
+const WeatherLog =
+  mongoose.models.WeatherLog || mongoose.model("WeatherLog", weatherLogSchema);
 
-export default weatherSchema;
+export default WeatherLog;

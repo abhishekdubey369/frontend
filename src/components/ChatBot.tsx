@@ -17,13 +17,35 @@ export function ChatBot() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
 
+  const logs = async () => {
+    try {
+      // Fetch logs using axios
+      const resLog = await axios.get('/api/log_handler');
+  
+      // Extract data from the response
+      const logdata = resLog.data;
+  
+      // Map the log data to extract only the 'main' property
+      const log = logdata.map((log: any) => log.weather.main);
+  
+      // Return the extracted logs as an array
+      return JSON.stringify(log);
+    } catch (error) {
+      console.error('Error fetching logs:', error);
+      return ""; // Return an empty array in case of an error
+    }
+  };
+  
+
   const handleSend = async () => {
     if (input.trim()) {
       setMessages([...messages, { text: input, isUser: true }])
       setInput('')
       
-      const res = await axios.post('/api/genAI/nlp_query', { weather_logs: input })
-      const data = await res.data
+      const logdata = await logs();
+      console.log(logdata);
+      const res = await axios.post('/api/genAI/nlp_query', { weather_logs: input + logdata });
+      const data = await res.data;
       if (data.success) {
         setMessages(prev => [...prev, { text: JSON.stringify(data.message.response.insights || data.message.response.errors), isUser: false }])
       } else {

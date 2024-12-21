@@ -1,33 +1,38 @@
-// import { create } from "domain";
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const eventSchema = mongoose.Schema({
-    username: {
+    name: {
         type: String,
-        required: [true, "Username is required"],
-        ref: "users"
+        required: [true, "Event name is required"],
     },
-    email: {
-        type: String,
-        required: [true, "Email is required"],
-        ref: "users"
-    },
-    Event:{
-        type : Object ,
-        required: [true, "Activity is required"],
-    },
-    createdAt: {
+    date: {
         type: Date,
-        default: new Date()
+        required: [true, "Event date is required"],
     },
-    updatedAt: {
-        type: Date,
-        default: new Date()
+    ticketPrice: {
+        type: Number,
+        required: true,
+        default: 0,
     },
-    isVerified: {
-        type: Boolean,
-        default: false
+    invitedFriends: {
+        type: [String],
+        default: [],
     },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        required: [true, "User is required"],
+    },
+}, {
+    timestamps: true,
+    toJSON: {
+        transform: (doc, ret) => {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.__v;
+            return ret;
+        },
+    }
 });
 
 const EventAct = mongoose.models.event || mongoose.model("event", eventSchema);

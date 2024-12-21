@@ -9,6 +9,7 @@ import { WeatherData } from '@/types/weather'
 import WeatherDisplay from '@/components/WeatherDisplay'
 import DashboardMenu from '@/components/DashboardMenu'
 import ActivityRecommendation from '@/components/ActivitRecommendation'
+import { fetchActivityRecommendation , fetchSummary} from '@/helper/recommendation'
 import axios from 'axios'
 
 export default function Dashboard() {
@@ -30,36 +31,11 @@ export default function Dashboard() {
         }
   }
 
-  const fetchSummary = async (weather: string,city:string): Promise<string> => {
-    const dataSent:{
-        "city": string,
-        "weather": string
-    }={
-        "city": city,
-        "weather": weather
-    }
-    try {
-        const response = await axios.post('/api/genAI/summary',dataSent)
-        const data = await response.data
-        if(data.success){
-            // console.log(data)
-            return JSON.stringify(data.message.response)
-        }
-        // console.log(response)
-        return JSON.stringify(data.message)
-    } catch (error:any) {
-        const response = await axios.get('/api/genAI/recommendation/recommend?weather='+weather)
-        const data = response.data
-        return data.activity
-    }
-  }
-
   const getReccomendation = async ()=>{
     const data = await fetchWeatherData(city)
         if(data){
         const weatherCondition = getWeatherCondition(data.weather[0].main)
         const recommendation = await fetchActivityRecommendation(weatherCondition,city)
-        // console.log(recommendation)
         setActivityRecommendation(recommendation)
         }
   }
@@ -88,6 +64,14 @@ export default function Dashboard() {
 
   const handleLog = async () => {
     const data = await fetchWeatherData(city)
+    if (weatherData) {
+      const response = await axios.post("/api/log_handler", {weather: weatherData});
+      console.log(response)
+      if (response.status === 201) {
+        const savedLog = await response.data;
+        setWeatherData(savedLog);
+      }
+    }
     setWeatherData(data)
     setIsDisplaying(true)
   }
@@ -103,29 +87,7 @@ export default function Dashboard() {
     return conditions[weatherMain] || 'sunny'
   }
 
-  const fetchActivityRecommendation = async (weather: string,city:string): Promise<string> => {
-    const dataSent:{
-        "city": string,
-        "weather": string
-    }={
-        "city": city,
-        "weather": weather
-    }
-    try {
-        const response = await axios.post('/api/genAI/recommendation',dataSent)
-        const data = await response.data
-        if(data.success){
-            // console.log(data)
-            return data.message.activity
-        }
-        // console.log(response)
-        return JSON.stringify(data.message)
-    } catch (error:any) {
-        const response = await axios.get('/api/genAI/recommendation/recommend?weather='+weather)
-        const data = response.data
-        return data.activity
-    }
-  }
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -151,7 +113,7 @@ export default function Dashboard() {
                 handleLog();
                 getReccomendation();
                 getSummary();
-            }}>Log</Button>
+            }}>Double Click to Log</Button>
           </div>
           <div>
           </div>
