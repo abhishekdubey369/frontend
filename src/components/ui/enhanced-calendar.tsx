@@ -23,14 +23,14 @@ export function EnhancedCalendar({
   const [calendarType, setCalendarType] = React.useState<"single" | "range">("single")
 
   return (
-    <div className={cn("grid gap-2", className)}>
+    <div className={cn("grid gap-1", className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
+              "w-[150px] justify-start text-left font-normal",
               !date && !dateRange && "text-muted-foreground"
             )}
           >
@@ -51,7 +51,7 @@ export function EnhancedCalendar({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-4/5 p-0 bg-red-500" align="start">
           <Select
             onValueChange={(value) => setCalendarType(value as "single" | "range")}
             defaultValue={calendarType}

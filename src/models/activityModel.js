@@ -6,12 +6,12 @@ const activitySchema = mongoose.Schema({
     username: {
         type: String,
         required: [true, "Username is required"],
-        unique: true
+        ref: "users"
     },
     email: {
         type: String,
         required: [true, "Email is required"],
-        unique: true
+        ref: "users"
     },
     activity:{
         type : Activity ,

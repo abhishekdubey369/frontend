@@ -7,31 +7,10 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Trash2, Wind, Droplets, Gauge, Thermometer, Eye } from 'lucide-react'
-// import { fetchWeatherData, deleteWeatherLog } from '@/app/' 
 import { WeatherData } from '@/types/weather'
 import { determineTheme } from '@/utils/themeUtils'
 import { WeatherDetail } from '@/components/WeatherDetail'
-
-export async function fetchWeatherData(city: string): Promise<WeatherData | null> {
-  try {
-    const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=335cc3f4e7ce883220210d7fc184f8bf`
-    )
-    if (!response.ok) {
-      throw new Error('Failed to fetch weather data')
-    }
-    const data: WeatherData = await response.json()
-    return data
-  } catch (error) {
-    console.error('Error fetching weather data:', error)
-    return null
-  }
-}
-
-export async function deleteWeatherLog(id: number): Promise<void> {
-  // In a real application, you would delete the log from your database here
-  console.log(`Deleting weather log with id: ${id}`)
-}
+import { fetchWeatherData, deleteWeatherLog } from '@/helper/weatherHelper'
 
 export default function WeatherLog() {
   const [city, setCity] = useState('')
@@ -41,7 +20,7 @@ export default function WeatherLog() {
 
   const handleFetchWeather = async () => {
     if (city) {
-      const data = await fetchWeatherData(city);
+      const data = await fetchWeatherData(city)
       if (data) {
         setWeatherLogs(prev => [data, ...prev])
         setTheme(determineTheme(data) as any)
@@ -65,12 +44,13 @@ export default function WeatherLog() {
           <CardTitle>Weather Log Management</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex space-x-2">
+          <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
             <Input
               type="text"
               placeholder="Enter city name"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              className="sm:w-64"
             />
             <Button onClick={handleFetchWeather}>Fetch Weather</Button>
           </div>
