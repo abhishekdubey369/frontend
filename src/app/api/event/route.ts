@@ -20,7 +20,9 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        const events = await EventAct.find();
+        const token:any = req.cookies.get("token");
+        const decoded:any = jwt.verify(token?.value, process.env.TOKEN_SECRET!);
+        const events = await EventAct.find({createdBy:decoded.id});
         return NextResponse.json(events, { status: 200 });
     } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
@@ -34,6 +36,7 @@ export async function PUT(req: NextRequest) {
         const updatedEvent = await EventAct.find({_id:id}).updateOne({$push: {invitedFriends: invitedFriends}});
         return NextResponse.json({ message: "Event updated successfully", event: updatedEvent }, { status: 200 });
     } catch (error:any) {
+        console.log(error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

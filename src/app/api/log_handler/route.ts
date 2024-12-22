@@ -24,9 +24,15 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const weatherLogs = await WeatherLog.find();
+    const token:any = req.cookies.get("token");
+    if (!token) {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    }
+    const decoded:any = jwt.verify(token?.value, process.env.TOKEN_SECRET!);
+    console.log(decoded.id);
+    const weatherLogs = await WeatherLog.find({ createdBy: decoded.id });
     // console.log(weatherLogs);
     const mappedLogs = weatherLogs.map((log) => ({
       ...log.toJSON(),

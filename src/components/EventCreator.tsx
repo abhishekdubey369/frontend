@@ -66,7 +66,7 @@ export default function EventCreator({}:any) {
             const updatedFriends = [...eventToUpdate.invitedFriends, invitedFriend];
 
             const response = await axios.put(`/api/event`, {
-                id: eventId||"",
+                id: eventId,
                 invitedFriends: updatedFriends,
             });
 

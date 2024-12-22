@@ -25,7 +25,9 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        const activities = await Activity.find();
+        const token:any = req.cookies.get("token");
+        const decoded:any = jwt.verify(token?.value||"", process.env.TOKEN_SECRET!);
+        const activities = await Activity.find({createdBy:decoded.id});
         return NextResponse.json(activities, { status: 200 });
     } catch (error:any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
