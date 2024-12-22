@@ -7,13 +7,24 @@ import {
 } from "@/utils/llmUtils";
 
 import axios from "axios";
-
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { cookies } from "next/headers";
 
 const NeighborhoodWeather: React.FC = () => {
   const { llmTypeOptions, openAIModels, groqModels } = generateLLMOptions();
   const router = useRouter();
+  const [cookieValue, setCookieValue] = useState('');
+
+  useEffect(() => {
+    // Parse cookies to find the specific one you need
+    const cookies = document.cookie.split('; ').reduce((acc:any, currentCookie:any) => {
+      const [name, value] = currentCookie.split('=');
+      acc[name] = value;
+      return acc;
+    }, {});
+
+    setCookieValue(cookies['token'] || '');
+  }, []);
 
   const [config, setConfig] = React.useState<LLMConfig>({
     llm_type: "openai",
@@ -34,9 +45,7 @@ const NeighborhoodWeather: React.FC = () => {
       if(validateLLMConfig(config)){
         localStorage.setItem("genaiConfig", JSON.stringify(config));
         await axios.post("/api/genAI/llm_config", config);
-        const cookie = await cookies();
-        const token = await cookie.get("token");
-        if(token){
+        if(cookieValue){
         router.push("/dashboard")}
         else{
           router.push("/login")
