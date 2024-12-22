@@ -21,7 +21,9 @@ export const sendMail = async ({ email, emailType, userId }:any) => {
         user[expiryField] = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const { domain, NODEMAILER_USER, NODEMAILER_PASS } = process.env;
+        const domain = process.env.DOMAIN;
+        const NODEMAILER_USER = process.env.NODEMAILER_USER;
+        const NODEMAILER_PASS = process.env.NODEMAILER_PASS;
         if (!domain || !NODEMAILER_USER || !NODEMAILER_PASS) {
             throw new Error('Missing environment variables for nodemailer');
         }
