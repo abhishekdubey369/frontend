@@ -10,6 +10,7 @@ export const fetchActivityRecommendation = async (weather: string,city:string): 
     try {
         const response = await axios.post('/api/genAI/recommendation',dataSent)
         const data = await response.data
+        console.log(data)
         if(data.success){
             // console.log(data)
             return data.message.activity
@@ -34,12 +35,13 @@ export const fetchSummary = async (weather: string,city:string): Promise<string>
     try {
         const response = await axios.post('/api/genAI/summary',dataSent)
         const data = await response.data
+        console.log(data)
         if(data.success){
             // console.log(data)
             return JSON.stringify(data.message.response)
         }
         // console.log(response)
-        return JSON.stringify(data.message)
+        return JSON.stringify(data)
     } catch (error:any) {
         const response = await axios.get('/api/genAI/recommendation/recommend?weather='+weather)
         const data = response.data

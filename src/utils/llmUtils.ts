@@ -16,13 +16,13 @@ export interface LLMConfig {
   
   export const groqModels = [
     "gemma2-9b-it",
+    "llama-3.1-8b-instant",
     "llama-3.3-70b-versatile",
     "llama-guard-3-8b",
     "llama3-70b-8192",
     "mixtral-8x7b-32768",
     "whisper-large-v3",
     "whisper-large-v3-turbo",
-    "llama-3.1-8b-instant",
   ];
   
   export function getModelsByLLMType(llmType: "openai" | "groq"): string[] {

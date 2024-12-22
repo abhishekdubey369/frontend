@@ -25,6 +25,7 @@ export default function Dashboard() {
         if(data){
         const weatherCondition = getWeatherCondition(data.weather[0].main)
         const res = await fetchSummary(weatherCondition,city)
+        // console.log(res)
         const resjs = await JSON.parse(res)
         setSummary(resjs.flirt_summary || 'Model not configure')
         setQuote(resjs.quote|| 'Model not configure')
@@ -33,9 +34,11 @@ export default function Dashboard() {
 
   const getReccomendation = async ()=>{
     const data = await fetchWeatherData(city)
+    // console.log(data)
         if(data){
         const weatherCondition = getWeatherCondition(data.weather[0].main)
         const recommendation:any = await fetchActivityRecommendation(weatherCondition,city)
+        // console.log(recommendation)
         setActivityRecommendation(recommendation)
         }
   }
