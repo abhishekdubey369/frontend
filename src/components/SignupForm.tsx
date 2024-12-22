@@ -34,7 +34,7 @@ export default function SignupForm() {
     if (result.data.error) {
       setError(result.data.error)
     } else if (result.data.success) {
-      router.push('/login') // Redirect to dashboard on successful signup
+      await router.push('/login') // Redirect to dashboard on successful signup
     }
   }
 

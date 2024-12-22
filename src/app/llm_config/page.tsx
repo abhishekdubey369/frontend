@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 
 import { useRouter } from "next/navigation";
+import { cookies } from "next/headers";
 
 const NeighborhoodWeather: React.FC = () => {
   const { llmTypeOptions, openAIModels, groqModels } = generateLLMOptions();
@@ -33,7 +34,13 @@ const NeighborhoodWeather: React.FC = () => {
       if(validateLLMConfig(config)){
         localStorage.setItem("genaiConfig", JSON.stringify(config));
         await axios.post("/api/genAI/llm_config", config);
-        router.push("/dashboard")
+        const cookie = await cookies();
+        const token = await cookie.get("token");
+        if(token){
+        router.push("/dashboard")}
+        else{
+          router.push("/login")
+        }
       }
     } catch (error: any) {
       alert(error.message);

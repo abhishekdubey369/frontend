@@ -23,7 +23,9 @@ export default function LoginForm() {
       setError(result.data.error)
       return
     }else if (result.data.success) {
-      router.push('/dashboard')
+      await router.push('/dashboard')
+    }else{
+      setError(JSON.stringify(result.data))
     }
   }
 
