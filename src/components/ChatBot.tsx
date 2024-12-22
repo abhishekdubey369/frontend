@@ -47,7 +47,7 @@ export function ChatBot() {
       const res = await axios.post('/api/genAI/nlp_query', { weather_logs: input + logdata });
       const data = await res.data;
       if (data.success) {
-        setMessages(prev => [...prev, { text: JSON.stringify(data.message.response.insights || data.message.response.errors), isUser: false }])
+        setMessages(prev => [...prev, { text: JSON.stringify(data.message.response.insights ||data.message.response[0] || data.message.response.errors), isUser: false }])
       } else {
         setMessages(prev => [...prev, { text: "hello, Please select different model and discuss on topic thing", isUser: false }])
       }

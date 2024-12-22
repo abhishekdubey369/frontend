@@ -11,7 +11,7 @@ export async function POST(req:NextRequest){
             const data:genaiConfig = llmData;
             const res= await axios.post(`${process.env.GENAI_BACKEND}/configure`,data)
             if(res.status===200){
-                console.log("Configured successfully")
+                // console.log("Configured successfully")
                 const redata = await req.json()
                 console.log("issue",redata)
                 const response = await axios.post(`${process.env.GENAI_BACKEND}/nlp_query/act`,redata)

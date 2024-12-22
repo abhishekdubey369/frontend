@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null)
   const [isDisplaying, setIsDisplaying] = useState(false)
   const [city, setCity] = useState('London')
-  const [activityRecommendation, setActivityRecommendation] = useState<string | null>(null)
+  const [activityRecommendation, setActivityRecommendation] = useState<string[] | null>(null)
   const [Summary, setSummary] = useState<string | null>(null)
   const [quote, setQuote] = useState<string | null>(null)
 
@@ -35,7 +35,7 @@ export default function Dashboard() {
     const data = await fetchWeatherData(city)
         if(data){
         const weatherCondition = getWeatherCondition(data.weather[0].main)
-        const recommendation = await fetchActivityRecommendation(weatherCondition,city)
+        const recommendation:any = await fetchActivityRecommendation(weatherCondition,city)
         setActivityRecommendation(recommendation)
         }
   }
@@ -117,16 +117,21 @@ export default function Dashboard() {
           </div>
           <div>
           </div>
-          {Summary && <p>{Summary}</p>}
+          {Summary &&(Summary?(<p>{Summary}</p>):(<p>Loading summary...</p>))}
           {weatherData && <WeatherDisplay weather={weatherData} />}
-          {activityRecommendation && (
-            <ActivityRecommendation 
-              activity={activityRecommendation} 
+          {activityRecommendation && (activityRecommendation ? (
+            activityRecommendation.map((rec:any, idx:any) =>
+              <ActivityRecommendation 
+              key={idx}
+              activity={rec} 
               onSchedule={(date, time) => console.log('Scheduled:', date, time)}
               onDelete={() => setActivityRecommendation(null)}
             />
-          )}
-          {quote && <p>{quote}</p>}
+            )
+          ) : (
+            <p>Loading recommendations...</p>
+          ))}
+          {quote&&(quote ? (<p>{quote}</p>):(<p>Loading quote...</p>))}
         </CardContent>
       </Card>
     </div>
